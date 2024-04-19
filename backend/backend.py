@@ -22,7 +22,7 @@ def postfile():
     elif file.filename in fh.getuploadedfiles(DOC_FOLDER):
         return jsonify({"status": "error", "message": "file already exists"}),409
     else:
-        file.save(DOC_FOLDER+'/'+{file.filename})
+        file.save(DOC_FOLDER+'/'+file.filename)
         return jsonify({"status": "success", "filename": file.filename}), 201
 
 
