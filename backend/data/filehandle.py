@@ -7,6 +7,7 @@ def createfile(file_path="data.json"):
     file = open(file_path, "w+")
     file.write("{}")
     file.close()
+    # this function needs to be improved such that it can also add content to the file from params
 
 
 # Function to write data to a file
@@ -29,19 +30,21 @@ def writetofile(data, file_path="data.json"):
 
     return 1
 
+
 # Function to read data from a file
 def readfromfile(file_name, file_path="data.json"):
     try:
         file = open(file_path, "r")
     except FileNotFoundError:
-        return 0
+        createfile(file_path)
+        return "Data not found"
 
     filedata = json.load(file)
     file.close()
     try: 
         return filedata[file_name]
     except KeyError:
-        return 0
+        return "Data not found"
 
 
 # Function to get uploaded files (files from uploaded_documents folder)
@@ -56,18 +59,21 @@ def getlistoffiles(file_path="data.json"):
     try:
         file = open(file_path, "r")
     except FileNotFoundError:
-        return 0
+        createfile(file_path)
+        return []
 
     filedata = json.load(file)
     file.close()
     return list(filedata.keys())
 
-# Function to delete a file
-def deletefile(file_name, file_path="data.json"):
+
+# Function to delete extracted data of a file
+def deletefiledata(file_name, file_path="data.json"):
     try:
         file = open(file_path, "r")
     except FileNotFoundError:
-        return 0
+        createfile(file_path)
+        return "Data not found"
 
     filedata = json.load(file)
     file.close()
@@ -75,11 +81,20 @@ def deletefile(file_name, file_path="data.json"):
     try:
         del filedata[file_name]
     except KeyError:
-        return "File not found"
+        return "Data not found"
 
     file = open(file_path, "w")
     json.dump(filedata, file)
     file.close()
+    return 1
+
+
+# Function to delete a file from uploaded_documents folder
+def deletefile(file_name, folder_path="./uploaded_documents"):
+    try:
+        os.remove(f"{folder_path}/{file_name}")
+    except FileNotFoundError:
+        return 0
     return 1
 
 
