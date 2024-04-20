@@ -98,3 +98,8 @@ def deletefile(file_name, folder_path="./uploaded_documents"):
     return 1
 
 
+# Function to delete a file from uploaded_documents folder and its extracted data from data.json
+def deletefileanddata(file_name, folder_path="./uploaded_documents", file_path="data.json"):
+    if deletefile(file_name, folder_path) == 1:
+        return deletefiledata(file_name, file_path)
+    return -1
