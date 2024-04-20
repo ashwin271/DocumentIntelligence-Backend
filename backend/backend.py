@@ -33,6 +33,33 @@ def getfiles():
     return jsonify(files)
 
 
+# route to get list of scanned documents
+@app.route("/getscannedfiles",methods=['GET'])
+def getscannedfiles():
+    files = fh.getlistoffiles(DATA_FILE)
+    return jsonify(files)
+
+
+# route to delete a document
+@app.route("/deletefile",methods=['DELETE'])
+def deletefile():
+    file_name = request.args.get('file_name')
+    if fh.deletefile(file_name,DOC_FOLDER) == 1:
+        return jsonify({"status": "success", "message": "file deleted"}), 200
+    else:
+        return jsonify({"status": "error", "message": "file not found"}),404
+    
+
+# route to delete extracted data of a document
+@app.route("/deletefiledata",methods=['DELETE'])
+def deletedata():
+    file_name = request.args.get('file_name')
+    if fh.deletefiledata(file_name,DATA_FILE) == 1:
+        return jsonify({"status": "success", "message": "data deleted"}), 200
+    else:
+        return jsonify({"status": "error", "message": "data not found"}),404
+
+
 # route to scan a document
 @app.route("/scan",methods=['GET'])
 def scan():

@@ -73,7 +73,7 @@ def deletefiledata(file_name, file_path="data.json"):
         file = open(file_path, "r")
     except FileNotFoundError:
         createfile(file_path)
-        return "Data not found"
+        return 0
 
     filedata = json.load(file)
     file.close()
@@ -81,7 +81,7 @@ def deletefiledata(file_name, file_path="data.json"):
     try:
         del filedata[file_name]
     except KeyError:
-        return "Data not found"
+        return 0
 
     file = open(file_path, "w")
     json.dump(filedata, file)
