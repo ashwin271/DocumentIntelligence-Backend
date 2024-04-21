@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 import data.filehandle as fh
 import ocr_extract as oe
+from flask_cors import CORS
 
 DOC_FOLDER = "./uploaded_documents"
 DATA_FILE = './data/data.json'
 
 app = Flask(__name__)
+CORS(app)
 
 # sample route
 @app.route("/")
@@ -55,7 +57,7 @@ def postfile():
     if file.filename == '': 
         return jsonify({"status": "error", "message": "no file selected"}),400
     elif file.filename in fh.getuploadedfiles(DOC_FOLDER):
-        return jsonify({"status": "error", "message": "file already exists"}),409
+        return jsonify({"status": "error", "message": "file name already exists"}),409
     else:
         file.save(DOC_FOLDER+'/'+file.filename)
         return jsonify({"status": "success", "filename": file.filename}), 201
@@ -64,6 +66,17 @@ def postfile():
 
 # Put methods
 
+# route to update/rescan extracted data of a document
+@app.route("/rescandata",methods=['PUT'])
+def rescandata():
+    file_name = request.args.get('file_name')
+    file_list = fh.getlistoffiles(DATA_FILE)
+    if file_name in file_list: 
+        response = oe.doc_ext(file_name)
+        fh.writetofile(response,DATA_FILE)
+        return response
+    else:
+        return jsonify({"status": "error", "message": "file not found"}),404
 
 
 
