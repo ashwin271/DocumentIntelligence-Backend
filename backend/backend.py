@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import data.filehandle as fh
 import ocr_extract as oe
 from flask_cors import CORS
+import json
 
 DOC_FOLDER = "./uploaded_documents"
 DATA_FILE = './data/data.json'
@@ -42,7 +43,7 @@ def scan():
     elif file_name in fh.getuploadedfiles(DOC_FOLDER):
         response = oe.doc_ext(file_name)
         fh.writetofile(response,DATA_FILE)
-        return response
+        return json.loads(response)
     else: 
         return jsonify({"status": "error", "message": "file not found"}),404
 

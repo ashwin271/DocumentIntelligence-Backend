@@ -9,8 +9,8 @@ def doc_ext(file_name):
 
     corrected = ext.spellcorrect(docData)
 
-    info = ext.extract(corrected, file_name)
+    info = ext.extract(corrected)
 
-    data = ext.format(info)
+    data = ext.format(info, file_name)
 
     return data

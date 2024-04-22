@@ -21,14 +21,14 @@ def spellcorrect(data):
     return spellcorrected
 
 #extracts the required data from the document
-def extract(data, file_name=""):
-    extframe = dataExtractionFrame.replace("<f_name>",file_name)
-    extracted=prompt(extframe,data)
+def extract(data):
+    extracted=prompt(dataExtractionFrame,data)
     return extracted
 
 #formats the extracted data
-def format(data):
+def format(data, file_name=""):
     formattedResponse = prompt(formatterPrompt,data)
+    formattedResponse = "{"+f'"{file_name}"'+":"+formattedResponse+"}"
     return formattedResponse
 
 

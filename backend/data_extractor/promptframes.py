@@ -9,7 +9,7 @@ text snippet:
 dataExtractionFrame="""
 Given a factual text document, identify and extract the following information:
 
-File Name: "<f_name>"
+
 Title: title of the document based on the summary
 Entities: People, organizations, locations, mentioned in the document.
 Events: Actions or occurrences described in the document.
@@ -23,31 +23,4 @@ The input document is provided below:
 """
 
 
-formatterPrompt = """
-from the information about the document provided, format the information and create a json object in the following format:
-{
-	"file_name": { 
-		"title": "Title of the document", //understand the summary and make a good title
-		"data": [
-			"important information 1", 
-			"important information 2", 
-			// ... Add more data entries 
-		], 
-		"dates": [ 
-			{ "value": "2024-04-03", "description": "...", "shouldTrack": true},  
-	        // shouldTrack is true if the date is like a deadline or a significant event or a future event that will occur that the user needs to be alerted when the time comes
-	        // shouldTrack is false if the date is not of the above category
-			{ "value": "2025-10-26", "description": "...", "shouldTrack": false}, 
-			// ... Add more date entries 
-		],
-		"summary": "A concise summary of the document"
-	}
-}
-
-the information about the document will be provided below provide the response in the above given format
-and the response should only contain the json object nothing else give response in plane text 
-do not use any markdown formatting
-
-information about document :
-
-"""
+formatterPrompt = """From the information about the document provided, format the information and create a json object in the following format: {"title": "Title of the document(understand the summary and make a good title)", "data": [ "important information 1", "important information 2", (value of "data" is a list of important points) ], "dates": [ { "value": "2024-04-03", "description": "...", "shouldTrack": true},  { "value": "2025-10-26", "description": "...", "shouldTrack": false}, (value of "dates" is an array of date objects with value as that date, description - a description about that date and shouldTrack - true if that date needs to be tracked ie if the date is important, false otherwise) ], "summary": "A concise summary of the document" } The response should only contain the json object nothing. Give response in plane text. Information about document :"""
