@@ -124,6 +124,7 @@ def getdates(file_path="data.json"):
                 dt["description"] = date["description"]
                 dt["file_name"] = key
                 dates.append(dt)
+    dates = sorted(dates, key=lambda x: x["value"])
     # try:
     #     file = open("./data/date.json", "w")
     # except FileNotFoundError:
