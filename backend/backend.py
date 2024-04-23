@@ -42,12 +42,21 @@ def scan():
         return jsonify({file_name:file_data})
     elif file_name in fh.getuploadedfiles(DOC_FOLDER):
         response = oe.doc_ext(file_name)
+        try: 
+            returnresponse = json.loads(response)
+        except json.JSONDecodeError:
+            return jsonify({"status": "error", "message": "error in scanning"}),500
         fh.writetofile(response,DATA_FILE)
-        return json.loads(response)
+        return returnresponse
     else: 
         return jsonify({"status": "error", "message": "file not found"}),404
 
 
+# route to get list of tracked dates
+@app.route("/gettrackeddates",methods=['GET'])
+def gettrackeddates():
+    dates = fh.getdates(DATA_FILE)
+    return jsonify(dates)
 
 # Post methods
 

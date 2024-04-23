@@ -103,3 +103,32 @@ def deletefileanddata(file_name, folder_path="./uploaded_documents", file_path="
     if deletefile(file_name, folder_path) == 1:
         return deletefiledata(file_name, file_path)
     return -1
+
+
+# Function to get dates which need to be tracked from data.json
+def getdates(file_path="data.json"):
+    try:
+        file = open(file_path, "r")
+    except FileNotFoundError:
+        createfile(file_path)
+        return []
+
+    filedata = json.load(file)
+    file.close()
+    dates = []
+    for key in filedata:
+        for date in filedata[key]["dates"]:
+            if date["shouldTrack"]:
+                dt = {}
+                dt["value"] = date["value"]
+                dt["description"] = date["description"]
+                dt["file_name"] = key
+                dates.append(dt)
+    # try:
+    #     file = open("./data/date.json", "w")
+    # except FileNotFoundError:
+    #     createfile("./data/dates.json")
+    #     file = open("./data/date.json", "w")
+    # json.dump(dates, file)
+    # file.close()
+    return dates
